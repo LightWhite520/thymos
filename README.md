@@ -14,6 +14,8 @@ tags:
 
 # Thymos-6D
 
+Published model bundle: [0x4C57/Thymos-6D](https://huggingface.co/0x4C57/Thymos-6D)
+
 Thymos is a six-dimensional text affect model. It maps a message to a bounded
 continuous state rather than a single emotion category:
 
