@@ -49,6 +49,33 @@ negation, code-switching, cultural context and ambiguous short messages may
 be unreliable. Treat `confidence` as an uncertainty signal, not a probability
 that the prediction is correct.
 
+## JVM inference
+
+Thymos exposes the same DJL inference chain used by OpenEden: Hugging Face
+tokenization, fixed-length Qwen inputs, TorchScript inference, six-dimensional
+validation, and a caller-supplied fallback.
+
+```kotlin
+import io.thymos.ThymosAffectAnalyzer
+import java.nio.file.Path
+
+ThymosAffectAnalyzer.fromBundle(Path.of("model")).use { analyzer ->
+    val state = analyzer.analyze("别担心，我只是有点累")
+    println(state)
+}
+```
+
+Download the runtime bundle and invoke the standalone CLI:
+
+```powershell
+.\gradlew.bat ensureModel
+.\gradlew.bat run --args="--model-dir model --text 别担心，我只是有点累"
+```
+
+The Maven publication coordinates are `io.openeden:thymos:0.1.0`. Consumers
+must provide the DJL PyTorch native runtime for their platform; the Windows
+distribution includes the tested `win-x86_64` CPU runtime.
+
 ## Python inference
 
 ```powershell
