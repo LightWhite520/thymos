@@ -28,19 +28,19 @@ Python inference and reproducibility.
 
 ## Results
 
-The held-out test split contains 819 records. Mean absolute error is
-`0.078755` across the six dimensions.
+The held-out test split contains 1,024 records. Mean absolute error is
+`0.069860` across the six dimensions.
 
 Per-dimension MAE:
 
 | Dimension | MAE |
 | --- | ---: |
-| valence | 0.05160 |
-| arousal | 0.06291 |
-| dominance | 0.05799 |
-| connectionNeed | 0.06470 |
-| openness | 0.07713 |
-| confidence | 0.15821 |
+| valence | 0.04775 |
+| arousal | 0.05858 |
+| dominance | 0.05564 |
+| connectionNeed | 0.05587 |
+| openness | 0.07358 |
+| confidence | 0.12774 |
 
 The training corpus was generated and reviewed synthetically. These metrics
 are not a substitute for evaluation on consented, representative human data.
