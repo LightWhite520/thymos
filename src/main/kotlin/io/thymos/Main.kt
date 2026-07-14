@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import java.nio.file.Path
+import kotlin.io.path.createDirectories
 
 data class CliArguments(
     val modelDirectory: Path,
@@ -12,7 +13,7 @@ data class CliArguments(
 )
 
 fun parseCliArguments(arguments: Array<String>): CliArguments {
-    var modelDirectory = Path.of("model")
+    var modelDirectory = Path.of("model").createDirectories()
     var text: String? = null
     var index = 0
     while (index < arguments.size) {
