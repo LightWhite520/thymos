@@ -2,7 +2,7 @@
 language:
 - zh
 - en
-license: apache-2.0
+license: agpl-3.0
 library_name: pytorch
 base_model: Qwen/Qwen3-Embedding-0.6B
 tags:
@@ -69,7 +69,8 @@ Training requires CUDA and BF16. CPU fallback is disabled by design.
 
 ## License and attribution
 
-The repository code is licensed under AGPL-3.0-or-later. The model is a
-fine-tuned derivative of Qwen3-Embedding-0.6B and remains subject to the
-upstream model license and terms. See the Qwen model card before redistribution
-or commercial use.
+The repository code and Thymos model artifacts are licensed under
+AGPL-3.0-or-later. The model is a fine-tuned derivative of
+Qwen3-Embedding-0.6B; upstream copyright, attribution, license notices and
+terms continue to apply. See the Qwen model card before redistribution or
+commercial use.
