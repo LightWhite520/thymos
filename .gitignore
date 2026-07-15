@@ -1,6 +1,7 @@
 __pycache__/
 .venv/
 *.pyc
+hf-upload*.log
 checkpoints/
 *.raw.jsonl
 *.samples.json

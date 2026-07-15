@@ -34,6 +34,13 @@ application {
     mainClass = "io.thymos.MainKt"
 }
 
+tasks.register<JavaExec>("runBatch") {
+    group = "application"
+    description = "Run Thymos affect inference for a JSON array of input texts."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass = "io.thymos.BatchMain"
+}
+
 tasks.test {
     useJUnitPlatform()
 }
