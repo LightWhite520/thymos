@@ -30,19 +30,19 @@ This project is a part of [openeden](https://github.com/LightWhite520/openeden)
 
 ## Results
 
-The held-out test split contains 1,024 records. Mean absolute error is
-`0.069860` across the six dimensions.
+The held-out test split contains 1,224 records. Mean absolute error is
+`0.059522` across the six dimensions.
 
 Per-dimension MAE:
 
 | Dimension | MAE |
 | --- | ---: |
-| valence | 0.04775 |
-| arousal | 0.05858 |
-| dominance | 0.05564 |
-| connectionNeed | 0.05587 |
-| openness | 0.07358 |
-| confidence | 0.12774 |
+| valence | 0.04139 |
+| arousal | 0.05092 |
+| dominance | 0.04929 |
+| connectionNeed | 0.05169 |
+| openness | 0.05914 |
+| confidence | 0.10470 |
 
 The training corpus was generated and reviewed synthetically. These metrics
 are not a substitute for evaluation on consented, representative human data.
