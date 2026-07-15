@@ -26,6 +26,8 @@ The model fine-tunes the full `Qwen/Qwen3-Embedding-0.6B` encoder with a
 bundle for DJL integration; `text_encoder/` and `head.pt` are included for
 Python inference and reproducibility.
 
+This project is a part of [openeden](https://github.com/LightWhite520/openeden)
+
 ## Results
 
 The held-out test split contains 1,024 records. Mean absolute error is
