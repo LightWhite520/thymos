@@ -1,6 +1,7 @@
 package io.thymos
 
 import ai.djl.Model
+import ai.djl.Device
 import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer
 import ai.djl.inference.Predictor
 import ai.djl.ndarray.NDList
@@ -17,7 +18,12 @@ class DjlQwenTextAffectPredictor private constructor(
     private val predictor: Predictor<String, FloatArray>,
     private val model: Model,
     private val tokenizer: HuggingFaceTokenizer,
+    private val engineName: String,
+    private val device: Device,
 ) : TextAffectPredictor {
+    override val inferenceEngineDescription: String =
+        "thymos=djl engine=$engineName device=${device.deviceType}(${device.deviceId})"
+
     override fun predict(text: String): FloatArray = predictor.predict(text)
 
     override fun close() {
@@ -67,7 +73,7 @@ class DjlQwenTextAffectPredictor private constructor(
                 try {
                     model.load(bundlePath, "model")
                     val predictor = model.newPredictor(QwenAffectTranslator(tokenizer, maxSequenceLength))
-                    return DjlQwenTextAffectPredictor(predictor, model, tokenizer)
+                    return DjlQwenTextAffectPredictor(predictor, model, tokenizer, engineName, device)
                 } catch (failure: Throwable) {
                     if (firstFailure == null) firstFailure = failure
                     tokenizer.close()

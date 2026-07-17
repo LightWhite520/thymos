@@ -38,4 +38,17 @@ class ThymosAffectAnalyzerTest {
 
         assertEquals(0.25f, analyzer.analyze("ambiguous").confidence)
     }
+
+    @Test
+    fun `exposes predictor inference engine description`() {
+        val analyzer = ThymosAffectAnalyzer(
+            predictor = object : TextAffectPredictor {
+                override val inferenceEngineDescription: String = "thymos=djl engine=PyTorch device=gpu(0)"
+                override fun predict(text: String): FloatArray = floatArrayOf(0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.9f)
+                override fun close() = Unit
+            },
+        )
+
+        assertEquals("thymos=djl engine=PyTorch device=gpu(0)", analyzer.inferenceEngineDescription)
+    }
 }

@@ -9,6 +9,8 @@ class ThymosAffectAnalyzer(
     private val fallback: suspend (String) -> AffectState = { AffectState.Uncertain },
 ) : AutoCloseable {
     private val mutex = Mutex()
+    val inferenceEngineDescription: String
+        get() = predictor.inferenceEngineDescription
 
     suspend fun analyze(text: String): AffectState = mutex.withLock {
         runCatching { AffectState.from(predictor.predict(text)) }
