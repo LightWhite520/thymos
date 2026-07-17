@@ -23,9 +23,6 @@ dependencies {
     implementation("ai.djl.pytorch:pytorch-engine:0.34.0")
     implementation("ai.djl.huggingface:tokenizers:0.34.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
-    if (System.getProperty("os.name").startsWith("Windows")) {
-        runtimeOnly("ai.djl.pytorch:pytorch-native-cpu:2.7.1:win-x86_64")
-    }
     testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
 }
