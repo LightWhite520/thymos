@@ -37,6 +37,25 @@ class DjlQwenTextAffectPredictorTest {
     }
 
     @Test
+    fun `CUDA runtime is prepared before DJL device candidates are resolved`() {
+        val events = mutableListOf<String>()
+
+        val devices = DjlQwenTextAffectPredictor.prepareDeviceCandidates(
+            devicePolicy = ThymosDevicePolicy.GPU,
+            prepareRuntime = {
+                events += "prepare:${it.name}"
+            },
+            resolveCandidates = {
+                events += "candidates"
+                listOf(ai.djl.Device.gpu())
+            },
+        )
+
+        assertEquals(listOf("prepare:GPU", "candidates"), events)
+        assertTrue(devices.single().isGpu)
+    }
+
+    @Test
     fun `trained bundle loads and returns six finite values`() {
         val bundle = runtimeBundlePath()
         if (!Files.isRegularFile(bundle.resolve("model.pt"))) return

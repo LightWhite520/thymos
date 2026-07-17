@@ -67,7 +67,11 @@ class DjlQwenTextAffectPredictor private constructor(
             require(maxSequenceLength > 0) { "Thymos maxSequenceLength must be positive" }
 
             var firstFailure: Throwable? = null
-            for (device in devicePolicy.candidates(engineName)) {
+            val deviceCandidates = prepareDeviceCandidates(
+                devicePolicy = devicePolicy,
+                resolveCandidates = { devicePolicy.candidates(engineName) },
+            )
+            for (device in deviceCandidates) {
                 val tokenizer = HuggingFaceTokenizer.newInstance(tokenizerPath)
                 val model = Model.newInstance("model", device, engineName)
                 try {
@@ -83,6 +87,15 @@ class DjlQwenTextAffectPredictor private constructor(
             }
             throw firstFailure ?: IllegalStateException("No Thymos device candidates were available")
         }
+
+        internal fun prepareDeviceCandidates(
+            devicePolicy: ThymosDevicePolicy,
+            prepareRuntime: (ThymosDevicePolicy) -> Unit = ThymosRuntime::prepare,
+            resolveCandidates: () -> List<Device>,
+        ): List<Device> {
+            prepareRuntime(devicePolicy)
+            return resolveCandidates()
+        }
     }
 }
 
@@ -97,7 +110,11 @@ private class QwenAffectTranslator(
         val length = minOf(maxSequenceLength, encoded.ids.size)
         encoded.ids.copyInto(ids, endIndex = length)
         encoded.attentionMask.copyInto(mask, endIndex = length)
-        return NDList(context.ndManager.create(ids), context.ndManager.create(mask))
+        val device = context.model.ndManager.device
+        return NDList(
+            context.ndManager.create(ids).toDevice(device, false),
+            context.ndManager.create(mask).toDevice(device, false),
+        )
     }
 
     override fun processOutput(context: TranslatorContext, list: NDList): FloatArray {
