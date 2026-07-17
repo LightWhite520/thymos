@@ -68,6 +68,16 @@ bootstrap once immediately before resolving device candidates. Prediction,
 tokenization, output mapping, model metadata validation, and CPU fallback remain
 unchanged.
 
+Thymos also exposes the same idempotent bootstrap through
+`ThymosRuntime.prepare()`. Applications which load another DJL PyTorch model
+before the affect bundle must call this entry point first; DJL's PyTorch engine
+is process-global and cannot change from CPU to CUDA after initialization.
+
+The Qwen TorchScript export replaces trace-time `Device("cpu")` constants with
+the device of each graph's first tensor input. This keeps one artifact portable
+across CPU fallback and CUDA inference instead of publishing device-specific
+model variants.
+
 OpenEden will consume the resulting Thymos commit. No Persona data, 8D vector,
 derived D, VQ-VAE quantization, prompt construction, or runtime state logic is
 modified.

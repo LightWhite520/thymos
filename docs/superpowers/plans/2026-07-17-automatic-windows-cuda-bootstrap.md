@@ -192,6 +192,7 @@ git commit -m "Prepare CUDA before Thymos engine loading"
 
 **Files:**
 - Modify: `D:/Project/openeden/core/build.gradle.kts`
+- Modify: `D:/Project/openeden/server/src/main/kotlin/io/openeden/server/bootstrap/Runtime.kt`
 - Modify only if needed for assertions: `D:/Project/openeden/core/src/jvmTest/kotlin/io/openeden/relationship/DjlTextAffectAnalyzerTest.kt`
 
 - [ ] **Step 1: Verify Thymos in a fresh JVM without manual PATH changes**
@@ -223,8 +224,10 @@ Expected: push succeeds and prints the commit used for the OpenEden dependency.
 
 Replace the existing `com.github.LightWhite520:thymos:<revision>` value in
 `D:/Project/openeden/core/build.gradle.kts` with the revision printed in Step 2.
-Do not alter OpenEden model paths, Persona data, vector dimensions, or VQ-VAE
-configuration.
+At the start of OpenEden's `djl` model-backend branch, call
+`ThymosRuntime.prepare()` before constructing `DjlVqVaeCodebookModelRunner` so
+the process-global PyTorch engine cannot initialize as CPU first. Do not alter
+OpenEden model paths, Persona data, vector dimensions, or VQ-VAE configuration.
 
 - [ ] **Step 4: Verify OpenEden's affected tests without manual PATH changes**
 
