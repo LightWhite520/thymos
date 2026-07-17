@@ -22,6 +22,7 @@ dependencies {
     api("ai.djl:api:0.34.0")
     implementation("ai.djl.pytorch:pytorch-engine:0.34.0")
     implementation("ai.djl.huggingface:tokenizers:0.34.0")
+    implementation("net.java.dev.jna:jna:5.17.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
