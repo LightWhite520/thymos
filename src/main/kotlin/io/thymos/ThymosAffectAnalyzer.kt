@@ -21,9 +21,10 @@ class ThymosAffectAnalyzer(
         fun fromBundle(
             bundlePath: Path,
             engineName: String = "PyTorch",
+            devicePolicy: ThymosDevicePolicy = ThymosDevicePolicy.fromRuntime(),
             fallback: suspend (String) -> AffectState = { AffectState.Uncertain },
         ): ThymosAffectAnalyzer = ThymosAffectAnalyzer(
-            predictor = DjlQwenTextAffectPredictor.fromBundle(bundlePath, engineName),
+            predictor = DjlQwenTextAffectPredictor.fromBundle(bundlePath, engineName, devicePolicy),
             fallback = fallback,
         )
     }

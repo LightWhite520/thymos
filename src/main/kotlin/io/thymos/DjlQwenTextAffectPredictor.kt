@@ -27,7 +27,11 @@ class DjlQwenTextAffectPredictor private constructor(
     }
 
     companion object {
-        fun fromBundle(bundlePath: Path, engineName: String = "PyTorch"): DjlQwenTextAffectPredictor {
+        fun fromBundle(
+            bundlePath: Path,
+            engineName: String = "PyTorch",
+            devicePolicy: ThymosDevicePolicy = ThymosDevicePolicy.fromRuntime(),
+        ): DjlQwenTextAffectPredictor {
             val metadataPath = bundlePath.resolve("metadata.json")
             val modelPath = bundlePath.resolve("model.pt")
             val tokenizerPath = bundlePath.resolve("tokenizer.json")
@@ -56,17 +60,22 @@ class DjlQwenTextAffectPredictor private constructor(
                 ?: error("Thymos maxSequenceLength is missing")
             require(maxSequenceLength > 0) { "Thymos maxSequenceLength must be positive" }
 
-            val tokenizer = HuggingFaceTokenizer.newInstance(tokenizerPath)
-            val model = Model.newInstance("model", engineName)
-            try {
-                model.load(bundlePath, "model")
-                val predictor = model.newPredictor(QwenAffectTranslator(tokenizer, maxSequenceLength))
-                return DjlQwenTextAffectPredictor(predictor, model, tokenizer)
-            } catch (failure: Throwable) {
-                tokenizer.close()
-                model.close()
-                throw failure
+            var firstFailure: Throwable? = null
+            for (device in devicePolicy.candidates(engineName)) {
+                val tokenizer = HuggingFaceTokenizer.newInstance(tokenizerPath)
+                val model = Model.newInstance("model", device, engineName)
+                try {
+                    model.load(bundlePath, "model")
+                    val predictor = model.newPredictor(QwenAffectTranslator(tokenizer, maxSequenceLength))
+                    return DjlQwenTextAffectPredictor(predictor, model, tokenizer)
+                } catch (failure: Throwable) {
+                    if (firstFailure == null) firstFailure = failure
+                    tokenizer.close()
+                    model.close()
+                    if (devicePolicy != ThymosDevicePolicy.AUTO) throw failure
+                }
             }
+            throw firstFailure ?: IllegalStateException("No Thymos device candidates were available")
         }
     }
 }
